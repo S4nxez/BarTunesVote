@@ -5,7 +5,8 @@ let songs = [ //TODO: Ten en cuenta que si los nombres de las canciones tienen c
     'Sweet Child O Mine',
     'Lose Yourself'
 ];
-const serverUrl = urlParams.get('server'); // URL del servidor backend
+const urlParams = new URLSearchParams(window.location.search);
+const serverUrl = urlParams.get('server');
 
 let timeRemaining = 60; // Tiempo de votación en segundos
 let interval;
@@ -50,8 +51,8 @@ function vote(songName) {
 		method: 'POST',
 		headers: { 'Content-Type': 'application/json' },
 		body: JSON.stringify({
-			songId: songId,
-			songName: songId, //TODO Cambiar por el id de la canción
+			songId: songName,
+			songName: songName, //TODO Cambiar por el id de la canción
 			sessionId: sessionId
 		}),
 	  }).then(response => {

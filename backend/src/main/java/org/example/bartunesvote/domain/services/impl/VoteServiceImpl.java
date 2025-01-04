@@ -16,10 +16,10 @@ public class VoteServiceImpl implements VoteService {
 
     public VoteServiceImpl() {
         // Inicializar los contadores de votos para A, B, C y D
-        canciones.add(new Song("Bohemian Rhapsody", "null", "A", BigDecimal.ZERO));
-        canciones.add(new Song("Shape of You", "null","B", BigDecimal.ZERO));
-        canciones.add(new Song("Sweet Child O Mine", "null","C", BigDecimal.ZERO));
-        canciones.add(new Song("Lose Yourself", "null","D", BigDecimal.ZERO));
+        canciones.add(new Song("Bohemian Rhapsody","Bohemian Rhapsody", "A", BigDecimal.ZERO));
+        canciones.add(new Song("Shape of You","Shape of You","B", BigDecimal.ZERO));
+        canciones.add(new Song("Sweet Child O Mine", "Sweet Child O Mine", "C", BigDecimal.ZERO));
+        canciones.add(new Song("Lose Yourself", "Lose Yourself", "D", BigDecimal.ZERO));
     }
 
     @Override
