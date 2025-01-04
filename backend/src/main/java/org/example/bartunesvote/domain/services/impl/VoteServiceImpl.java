@@ -16,10 +16,10 @@ public class VoteServiceImpl implements VoteService {
 
     public VoteServiceImpl() {
         // Inicializar los contadores de votos para A, B, C y D
-        canciones.add(new Song("Bohemian Rhapsody", "A", BigDecimal.ZERO));
-        canciones.add(new Song("Shape of You", "B", BigDecimal.ZERO));
-        canciones.add(new Song("Sweet Child O Mine", "C", BigDecimal.ZERO));
-        canciones.add(new Song("Lose Yourself", "D", BigDecimal.ZERO));
+        canciones.add(new Song("Bohemian Rhapsody", "null", "A", BigDecimal.ZERO));
+        canciones.add(new Song("Shape of You", "null","B", BigDecimal.ZERO));
+        canciones.add(new Song("Sweet Child O Mine", "null","C", BigDecimal.ZERO));
+        canciones.add(new Song("Lose Yourself", "null","D", BigDecimal.ZERO));
     }
 
     @Override
@@ -37,7 +37,8 @@ public class VoteServiceImpl implements VoteService {
     }
 
     @Override
-    public void add(VoteUI voteUI) {// Sumar un voto a la opción seleccionada
+    public void add(VoteUI voteUI) {
+        // Sumar un voto a la opción seleccionada
         canciones.stream().filter(cancion ->
                 cancion.getSongId().equals(voteUI.getSongId())
         ).forEach(Song::addVote);

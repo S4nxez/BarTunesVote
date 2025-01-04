@@ -8,6 +8,7 @@ import java.math.BigDecimal;
 @Data
 @AllArgsConstructor
 public class Song {
+    private String songName;
     private String songId;
     private String songPlace;
     private BigDecimal votes;

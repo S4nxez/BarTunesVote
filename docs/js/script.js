@@ -5,7 +5,7 @@ let songs = [ //TODO: Ten en cuenta que si los nombres de las canciones tienen c
     'Sweet Child O Mine',
     'Lose Yourself'
 ];
-let serverUrl = 'https://f6tv949b-8080.uks1.devtunnels.ms'; // URL del servidor backend
+const serverUrl = urlParams.get('server'); // URL del servidor backend
 
 let timeRemaining = 60; // Tiempo de votación en segundos
 let interval;
@@ -49,7 +49,11 @@ function vote(songName) {
 	fetch(`${serverUrl}/api/vote`, {
 		method: 'POST',
 		headers: { 'Content-Type': 'application/json' },
-		body: JSON.stringify({ songId: songName, sessionId: sessionId }),
+		body: JSON.stringify({
+			songId: songId,
+			songName: songId, //TODO Cambiar por el id de la canción
+			sessionId: sessionId
+		}),
 	  }).then(response => {
 		if (response.ok) {
 		  alert('Voto registrado exitosamente.Tu id de sesión: ' + sessionId);
@@ -107,7 +111,7 @@ function getWinner() {
 			}
 		  }).then(data => {
 			const winner = data;
-			alert(`El ganador es: ${winner.songId}`);
+			alert(`El ganador es: ${winner.songName} con ${winner.votes} votos.`);
 		  }).catch(error => {
 			alert('Error al obtener el ganador.' + error);
 		  });
