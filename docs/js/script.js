@@ -5,7 +5,7 @@ let songs = [ //TODO: Ten en cuenta que si los nombres de las canciones tienen c
     'Sweet Child O Mine',
     'Lose Yourself'
 ];
-let serverUrl = 'http://localhost:3000'; // URL del servidor backend
+let serverUrl = 'https://f6tv949b-8080.uks1.devtunnels.ms'; // URL del servidor backend
 
 let timeRemaining = 60; // Tiempo de votación en segundos
 let interval;
@@ -49,15 +49,15 @@ function vote(songName) {
 	fetch(`${serverUrl}/api/vote`, {
 		method: 'POST',
 		headers: { 'Content-Type': 'application/json' },
-		body: JSON.stringify({ vote: songName, sessionId: sessionId }),
+		body: JSON.stringify({ songId: songName, sessionId: sessionId }),
 	  }).then(response => {
 		if (response.ok) {
 		  alert('Voto registrado exitosamente.Tu id de sesión: ' + sessionId);
 		} else {
-		  alert('Error al registrar el voto. Tu id de sesión: ' + sessionId);
+		  alert('Error al registrar el voto. Response status ' + response.status);
 		}
 	  }).catch(error => {
-		alert('Error al configurar el servidor. Tu id de sesión: ' + sessionId);
+		alert('Error al configurar el servidor. Tu id de sesión: ' + error);
 	  });
     // Aquí enviaría el voto al backend para registrar la votación.
 }
@@ -86,6 +86,55 @@ function updateTime() {
         document.getElementById('time-remaining').innerText = `Tiempo restante: ${formatTime(timeRemaining)}`;
         timeRemaining--;
     }
+}
+
+function getWinner() {
+	/*@CrossOrigin(origins = "https://s4nxez.github.io/BarTunesVote/")
+    @GetMapping
+    public String getWinner(){
+        return voteService.getWinner();
+    }
+		este es el metodo que se llama desde el backend para obtener el ganador
+		*/
+		fetch(`${serverUrl}/api/vote`, {
+			method: 'GET',
+			headers: { 'Content-Type': 'application/json' },
+		  }).then(response => {
+			if (response.ok) {
+			  return response.json();
+			} else {
+			  throw new Error('Error al obtener el ganador: ' + response.status + response.statusText);
+			}
+		  }).then(data => {
+			const winner = data;
+			alert(`El ganador es: ${winner.songId}`);
+		  }).catch(error => {
+			alert('Error al obtener el ganador.' + error);
+		  });
+}
+
+function resetVotes() {
+	/* Metodo del backend:
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+    @DeleteMapping
+    public void resetVotes() {
+        voteService.resetVotes();
+    }
+	*/
+	fetch(`${serverUrl}/api/vote`, {
+		method: 'DELETE',
+		headers: { 'Content-Type': 'application/json' },
+	  }).then(response => {
+		if (response.ok) {
+		  alert('Votos reseteados exitosamente.');
+		}
+		else {
+		  alert('Error al resetear los votos. Response status ' + response.status);
+		}
+		}).catch(error => {
+		alert('Error al configurar el servidor. Tu id de sesión: ' + error);
+	  });
+
 }
 
 // Formatear el tiempo a MM:SS
