@@ -88,7 +88,7 @@ function updateTime() {
         votingEnabled = false; // Desactivar votación
         document.getElementById('time-remaining').innerText = 'El tiempo ha terminado. No puedes votar más.';
     } else {
-        document.getElementById('time-remaining').innerText = `Tiempo restante: ${formatTime(timeRemaining)}`;
+        document.getElementById('time-remaining').innerText = `Tiempo: ${formatTime(timeRemaining)}`;
         timeRemaining--;
     }
 }

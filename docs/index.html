@@ -11,23 +11,25 @@
 <div class="container">
     <div class="row">
         <div class="content">
-            <h2>Encuesta de Canciones</h2>
-
+            <h2>Bar Tunes Vote</h2>
+			<br>
             <!-- Tiempo restante -->
-            <div id="time-remaining">Tiempo restante: 00:00</div>
-
-            <h4>Vota por tu canción favorita</h4>
-
+            <div id="time-remaining">Tiempo: 00:00</div>
             <!-- Lista de canciones -->
+			 <br>
             <div id="song-list">
                 <!-- Las canciones se cargarán aquí con JavaScript -->
             </div>
-	<button onclick="getWinner()">winner</button>
-	<button onclick="resetVotes()">reset</button>
-            <h4>Añadir nueva canción</h4>
-            <div class="input-group">
+			<!-- Botones
+				<button onclick="getWinner()">winner</button>
+				<button onclick="resetVotes()">reset</button>
+				-->
+           		<div class="input-group">
                 <input type="text" id="new-song" placeholder="Nombre de la nueva canción">
-                <button onclick="addSong()">Añadir</button>
+<button onclick="addSong()">
+    <img src="imgs/enviar.png" alt="Añadir">
+</button>
+
             </div>
         </div>
     </div>

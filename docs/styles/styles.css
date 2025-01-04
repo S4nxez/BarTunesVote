@@ -23,31 +23,29 @@ body {
 }
 
 .container {
-    width: 90%;
-    max-width: 600px;
     padding: 20px;
     border: 1px solid #d1d1fe;
     border-radius: 10px;
     background: #131313;
     box-shadow: 0 0 10px #2222b6;
-    margin-top: 20px;
 }
 
 h2 {
+
+	font-family: megalona !important;
+    font-size: 3rem;
     text-align: center;
-    margin-bottom: 20px;
     color: #dedefc;
     text-shadow: 0 0 15px #2222b6, 0 0 30px #2222b6;
 }
 
 #time-remaining {
-	font-family: megalona !important;
-    font-size: 2rem;
+    font-size: 1.5rem;
     text-align: center;
     font-weight: bold;
     margin-bottom: 20px;
-    color: #ffa4bb;
-    text-shadow: 0 0 15px #ff2a60, 0 0 30px #ff2a60;
+    color: #fcbdd1;
+    text-shadow: 0 0 15px #ff1550, 0 0 30px #ff1550;
 }
 
 h4 {
@@ -60,7 +58,7 @@ h4 {
 #song-list {
     margin-bottom: 20px;
     padding: 10px;
-    border: 1px solid #16164b;
+    border: 1px solid #2f2f42;
     border-radius: 5px;
     background: #131313;
     box-shadow: 0 0 5px #16164b inset;
@@ -71,7 +69,7 @@ h4 {
     align-items: center;
     justify-content: space-between;
     background: #262626;
-    border: 1px solid #16164b;
+    border: 1px solid #2f2f46;
     border-radius: 5px;
     margin-bottom: 10px;
     padding: 10px;
@@ -122,13 +120,22 @@ h4 {
 input[type="text"] {
     flex-grow: 1;
     padding: 10px;
-    border: 1px solid #16164b;
+    border: 1px solid  #2f2f46;
     border-radius: 5px;
     background: #262626;
     color: #d3d3d3;
 }
+button img {
+    width: 100%; /* La imagen ocupará el ancho total del botón */
+    height: 100%; /* La imagen ocupará la altura total del botón */
+    object-fit: contain; /* Mantiene la proporción de la imagen */
+    display: block; /* Elimina espacios en línea alrededor de la imagen */
+}
 
 button {
+	width: 40px; /* Ancho del botón */
+    height: 40px; /* Alto del botón */
+    padding: 0; /* Elimina espacio interno adicional */
     padding: 10px;
     border: none;
     border-radius: 5px;
@@ -138,6 +145,9 @@ button {
     cursor: pointer;
     box-shadow: 0 0 5px #16164b;
     transition: background-color 0.3s ease;
+	display: flex; /* Asegura un diseño flexible */
+    align-items: center; /* Centra la imagen verticalmente */
+    justify-content: center; /* Centra la imagen horizontalmente */
 }
 
 button:hover {
@@ -147,7 +157,7 @@ button:hover {
 
 @media (max-width: 600px) {
     .container {
-        width: 100%;
+        width: 90%;
         padding: 10px;
     }
 }
