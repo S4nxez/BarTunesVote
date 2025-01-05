@@ -58,8 +58,10 @@ function vote(songName) {
 	  }).then(response => {
 		if (response.ok) {
 		  alert('Voto registrado exitosamente.Tu id de sesión: ' + sessionId);
-		} else {
-		  alert('Error al registrar el voto. Response status ' + response.status);
+		} else {// Procesar el cuerpo de la respuesta para obtener el mensaje de error
+			return response.json().then(errorData => {
+			  alert(errorData.message || 'Error desconocido');
+			});
 		}
 	  }).catch(error => {
 		alert('Error al configurar el servidor. Tu id de sesión: ' + error);
@@ -86,7 +88,7 @@ function updateTime() {
     if (timeRemaining <= 0) {
         clearInterval(interval);
         votingEnabled = false; // Desactivar votación
-        document.getElementById('time-remaining').innerText = 'El tiempo ha terminado. No puedes votar más.';
+        document.getElementById('time-remaining').innerText = 'Votación finalizada';
     } else {
         document.getElementById('time-remaining').innerText = `Tiempo: ${formatTime(timeRemaining)}`;
         timeRemaining--;

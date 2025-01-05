@@ -1,0 +1,69 @@
+/* Estilos generales */
+@font-face {
+    font-family: megalona;
+    src: url("fonts/titlesStylish.ttf");
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #0d0d0d;
+    color: #d3d3d3;
+    font-family: 'Arial', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden;
+    flex-direction: column;
+}
+
+.container {
+	transform: translateY(-10%);
+    padding: 20px;
+    border: 1px solid #d1d1fe;
+    border-radius: 10px;
+    background: #131313;
+    box-shadow: 0 0 10px #2222b6;
+}
+
+/* Estilo de la corona */
+.crown {
+    position: absolute;
+    top: -60px; /* Ajusta según la distancia deseada */
+    right: -20px; /* Ajusta según la distancia deseada */
+    height: 70px;
+    width: 70px;
+    transform: rotate(20deg); /* Gira la corona 30° */
+    z-index: 10; /* Asegura que la corona esté por encima del contenedor */
+}
+
+/* Otros estilos */
+#administrador {
+    font-family: megalona !important;
+    font-size: 3rem;
+    text-align: center;
+    color: #fcfade;
+    text-shadow: 0 0 15px #ffc600, 0 0 30px #ffc600;
+}
+
+h2 {
+    font-family: megalona !important;
+    font-size: 3rem;
+    text-align: center;
+    color: #dedefc;
+    text-shadow: 0 0 15px #2222b6, 0 0 30px #2222b6;
+}
+
+/* Continúa con los estilos previos, si es necesario */
+
+@media (max-width: 600px) {
+    .container {
+        width: 90%;
+        padding: 10px;
+    }
+}

@@ -7,5 +7,5 @@ public interface VoteService {
 
     void resetVotes();
 
-    void add(VoteUI voteUI);
+    boolean add(VoteUI voteUI);
 }

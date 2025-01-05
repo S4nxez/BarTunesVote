@@ -9,10 +9,12 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class VoteServiceImpl implements VoteService {
     private final List<Song> canciones = new ArrayList<>();
+    private List<String> sesiones = new ArrayList<>();
 
     public VoteServiceImpl() {
         // Inicializar los contadores de votos para A, B, C y D
@@ -37,10 +39,17 @@ public class VoteServiceImpl implements VoteService {
     }
 
     @Override
-    public void add(VoteUI voteUI) {
+    public boolean add(VoteUI voteUI) {
         // Sumar un voto a la opción seleccionada
+        boolean flag = false;
+
+        Optional<String> sesionOpt = sesiones.stream().filter(sesion -> sesion.equals(voteUI.getSessionId())).findFirst();
+        if (sesionOpt.isPresent())
+            return false;
+        sesiones.add(voteUI.getSessionId());
         canciones.stream().filter(cancion ->
                 cancion.getSongId().equals(voteUI.getSongId())
         ).forEach(Song::addVote);
+        return true;
     }
 }
