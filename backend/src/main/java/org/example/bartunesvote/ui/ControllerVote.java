@@ -28,7 +28,7 @@ public class ControllerVote {
                     .status(HttpStatus.BAD_REQUEST)
                     .body(Collections.singletonMap("message", "Ya has votado"));
         }
-        log.info("Voto recibido: " + voteUI);
+        log.info("Voto recibido: {}", voteUI);
         return ResponseEntity.ok().build();
     }
 
