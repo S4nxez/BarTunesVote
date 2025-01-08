@@ -134,7 +134,6 @@ button img {
 }
 
 button {
-	width: 40px; /* Ancho del botón */
     height: 40px; /* Alto del botón */
     padding: 0; /* Elimina espacio interno adicional */
     padding: 10px;
@@ -146,7 +145,6 @@ button {
     cursor: pointer;
     box-shadow: 0 0 5px #16164b;
     transition: background-color 0.3s ease;
-	display: flex; /* Asegura un diseño flexible */
     align-items: center; /* Centra la imagen verticalmente */
     justify-content: center; /* Centra la imagen horizontalmente */
 }

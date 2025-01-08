@@ -14,24 +14,39 @@ let sessionId;
 let votingEnabled = true;
 
 // Cargar las canciones en la vista
-function loadSongs() {
-    const songListDiv = document.getElementById('song-list');
-    songListDiv.innerHTML = ''; // Limpiar la lista antes de recargar
-
-    songs.forEach(song => {
-        const card = document.createElement('div');
-        card.classList.add('card');
-        card.setAttribute('onclick', `vote('${song}')`); // Añadir evento de clic a la tarjeta
-
-        card.innerHTML = `
-            <div class="card-body">
-                <div class="song-container">
-                    <p class="song-title">${song}</p>
-                </div>
-            </div>
-        `;
-        songListDiv.appendChild(card);
-    });
+function loadSongs(playlistId) {
+const songListDiv = document.getElementById('song-list');
+	fetch(`${serverUrl}/songs/${playlistId}`, {
+		method: 'GET',
+		credentials: 'include',
+		headers: {
+			'Authorization': `Bearer ${accessToken}`,
+			'Content-Type': 'application/json',
+		},
+	})
+	.then(response => {
+		console.log('Response:', response);
+		return response.json();
+	})
+	.then(songsData => {
+		songsData.forEach(song => {
+			const card = document.createElement('div');
+			card.classList.add('card');
+			card.setAttribute('onclick', `vote('${song.songId}')`);
+			card.innerHTML = `
+				<div class="card-body">
+					<div class="song-container">
+						<p class="song-title">${song.songName}</p>
+					</div>
+				</div>
+			`;
+			songListDiv.appendChild(card);
+		});
+	})
+	.catch(error => {
+		console.error('Error loading songs:', error);
+		songListDiv.innerHTML = '<p>Error loading songs from playlist</p>';
+	});
 }
 
 function generateSessionId() {
@@ -42,30 +57,31 @@ function generateSessionId() {
 }
 
 // Función para votar por una canción
-function vote(songName) {
+function vote(songId) {
     if (!votingEnabled) {
         alert("El tiempo de votación ha terminado.");
         return;
     }
-	fetch(`${serverUrl}/api/vote`, {
-		method: 'POST',
-		headers: { 'Content-Type': 'application/json' },
-		body: JSON.stringify({
-			songId: songName,
-			songName: songName, //TODO Cambiar por el id de la canción
-			sessionId: sessionId
-		}),
-	  }).then(response => {
-		if (response.ok) {
-		  alert('Voto registrado exitosamente.Tu id de sesión: ' + sessionId);
-		} else {// Procesar el cuerpo de la respuesta para obtener el mensaje de error
-			return response.json().then(errorData => {
-			  alert(errorData.message || 'Error desconocido');
-			});
-		}
-	  }).catch(error => {
-		alert('Error al configurar el servidor. Tu id de sesión: ' + error);
-	  });
+    fetch(`${serverUrl}/api/vote`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            songId: songId,
+            sessionId: sessionId
+        }),
+    })
+    .then(response => {
+        if (response.ok) {
+            alert('Voto registrado exitosamente.');
+        } else {
+            return response.json().then(errorData => {
+                alert(errorData.message || 'Error desconocido');
+            });
+        }
+    })
+    .catch(error => {
+        alert('Error al registrar el voto: ' + error);
+    });
     // Aquí enviaría el voto al backend para registrar la votación.
 }
 
@@ -128,7 +144,7 @@ function resetVotes() {
         voteService.resetVotes();
     }
 	*/
-	fetch(`${serverUrl}/api/vote`, {
+	fetch(`${serverUrl}/`, {
 		method: 'DELETE',
 		headers: { 'Content-Type': 'application/json' },
 	  }).then(response => {
@@ -158,7 +174,8 @@ function startVotingTimer() {
 
 // Llamar a la función para cargar las canciones y comenzar el temporizador al cargar la página
 window.onload = function() {
-    loadSongs();
+	const playlistId = '46BC7zm67B71WZu19pYo9Q'; // Replace with actual playlist ID
+    loadSongs(playlistId);
     startVotingTimer();
-	sessionId = generateSessionId();
+    sessionId = generateSessionId();
 };

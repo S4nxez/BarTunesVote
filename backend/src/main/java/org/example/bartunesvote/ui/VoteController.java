@@ -14,10 +14,10 @@ import java.util.Collections;
 @Log4j2
 @RestController
 @RequestMapping("/api/vote")
-public class ControllerVote {
+public class VoteController {
     private final VoteService voteService;
 
-    public ControllerVote(VoteService voteService){
+    public VoteController(VoteService voteService){
         this.voteService=voteService;
     }
 
