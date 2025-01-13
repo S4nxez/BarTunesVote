@@ -6,12 +6,10 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.security.oauth2.client.web.OAuth2AuthorizedClientRepository;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.web.context.annotation.SessionScope;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import javax.servlet.http.HttpSession;
 import java.util.Arrays;
 
 @Configuration
@@ -31,7 +29,7 @@ public class SecurityConfig {
         http.cors().configurationSource(corsConfigurationSource()).and()
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/", "/login", "/oauth2/**").permitAll() // Rutas públicas
-                        .requestMatchers("/api/vote").authenticated() // Rutas protegidas
+                        .requestMatchers("/api/vote").permitAll() // Rutas protegidas
                         .anyRequest().permitAll() // Permitir todas las demás rutas
                 )
                 .oauth2Login(oauth2 -> oauth2
@@ -52,7 +50,7 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:5501")); // Origen permitido
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:5501", "https://f6tv949b-5501.uks1.devtunnels.ms/","https://s4nxez.github.io")); // Origen permitido
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS")); // Métodos permitidos
         configuration.setAllowedHeaders(Arrays.asList(
                 "Authorization",
