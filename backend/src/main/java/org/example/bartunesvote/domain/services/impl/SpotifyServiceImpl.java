@@ -1,5 +1,6 @@
 package org.example.bartunesvote.domain.services.impl;
 
+import org.example.bartunesvote.domain.model.Song;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -11,9 +12,8 @@ import org.springframework.security.oauth2.client.authentication.OAuth2Authentic
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import java.math.BigDecimal;
+import java.util.*;
 
 @Service
 public class SpotifyServiceImpl {
@@ -21,13 +21,6 @@ public class SpotifyServiceImpl {
 
     @Autowired
     private OAuth2AuthorizedClientService authorizedClientService;
-
-    public String getAccessToken(OAuth2AuthenticationToken authentication) {
-        OAuth2AuthorizedClient client = authorizedClientService.loadAuthorizedClient(
-                authentication.getAuthorizedClientRegistrationId(),
-                authentication.getName());
-        return client.getAccessToken().getTokenValue();
-    }
 
     public void playSong(String accessToken, String trackId) {
         RestTemplate restTemplate = new RestTemplate();
@@ -43,6 +36,32 @@ public class SpotifyServiceImpl {
 
         // Realiza la solicitud PUT a la API de Spotify
         restTemplate.exchange(SPOTIFY_PLAY_URL, HttpMethod.PUT, entity, Void.class);
+    }
+
+    public List<Song> getFourSongsFromPlaylist(String accessToken, String playlistId) {
+        RestTemplate restTemplate = new RestTemplate();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setBearerAuth(accessToken);
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        HttpEntity<String> entity = new HttpEntity<>(headers);
+
+        String url = "https://api.spotify.com/v1/playlists/" + playlistId + "/tracks"; // Añadí "/tracks" al final
+        Map<String, Object> response = restTemplate.exchange(url, HttpMethod.GET, entity, Map.class).getBody();
+
+        List<Map<String, Object>> items = (List<Map<String, Object>>) response.get("items");
+        List<Song> songs = new ArrayList<>();
+        String[] places = {"A", "B", "C", "D"};
+        int index = 0;
+
+        for (; index<4;index++ ) {
+            Map<String, Object> track = (Map<String, Object>) items.get(index).get("track");
+            String songName = (String) track.get("name");
+            String trackId = (String) track.get("id");
+            songs.add(new Song(songName, trackId, places[index]));
+        }
+
+        return songs;
     }
 }
 

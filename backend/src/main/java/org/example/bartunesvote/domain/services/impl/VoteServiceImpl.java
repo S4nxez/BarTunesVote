@@ -1,6 +1,7 @@
 package org.example.bartunesvote.domain.services.impl;
 
-import org.example.bartunesvote.domain.model.Song;
+import lombok.Setter;
+import org.example.bartunesvote.domain.model.SongCard;
 import org.example.bartunesvote.domain.model.VoteUI;
 import org.example.bartunesvote.domain.services.VoteService;
 import org.springframework.stereotype.Service;
@@ -12,23 +13,24 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@Setter
 public class VoteServiceImpl implements VoteService {
-    private final List<Song> canciones = new ArrayList<>();
+    private final List<SongCard> canciones = new ArrayList<>();
     private List<String> sesiones = new ArrayList<>();
 
     public VoteServiceImpl() {
         // Inicializar los contadores de votos para A, B, C y D
-        canciones.add(new Song("Bohemian Rhapsody","Bohemian Rhapsody", "A", BigDecimal.ZERO));
-        canciones.add(new Song("Shape of You","Shape of You","B", BigDecimal.ZERO));
-        canciones.add(new Song("Sweet Child O Mine", "Sweet Child O Mine", "C", BigDecimal.ZERO));
-        canciones.add(new Song("Lose Yourself", "Lose Yourself", "D", BigDecimal.ZERO));
+        canciones.add(new SongCard("A", BigDecimal.ZERO));
+        canciones.add(new SongCard("B", BigDecimal.ZERO));
+        canciones.add(new SongCard("C", BigDecimal.ZERO));
+        canciones.add(new SongCard("D", BigDecimal.ZERO));
     }
 
     @Override
-    public Song getWinner() {
+    public SongCard getWinner() {
         // Encontrar la opción con más votos
         return canciones.stream()
-                .max(Comparator.comparing(Song::getVotes))
+                .max(Comparator.comparing(SongCard::getVotes))
                 .orElse(null);
     }
 
@@ -36,20 +38,22 @@ public class VoteServiceImpl implements VoteService {
     public void resetVotes() {
         // Reiniciar todos los contadores
         canciones.forEach(song -> song.setVotes(BigDecimal.ZERO));
+        sesiones.clear();
     }
 
     @Override
     public boolean add(VoteUI voteUI) {
         // Sumar un voto a la opción seleccionada
-        boolean flag = false;
+        Optional<String> sessionOpt = sesiones.stream().filter(session ->
+                                session.equals(voteUI.getSessionId())).findFirst();
 
-        Optional<String> sesionOpt = sesiones.stream().filter(sesion -> sesion.equals(voteUI.getSessionId())).findFirst();
-        if (sesionOpt.isPresent())
+        if (sessionOpt.isPresent())
             return false;
         sesiones.add(voteUI.getSessionId());
+
         canciones.stream().filter(cancion ->
-                cancion.getSongId().equals(voteUI.getSongId())
-        ).forEach(Song::addVote);
+                cancion.getPlace().equals(voteUI.getPlace())
+        ).forEach(SongCard::addVote);
         return true;
     }
 }
