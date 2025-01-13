@@ -6,7 +6,7 @@ let interval;
 let sessionId;
 let votingEnabled = true;
 
-const socket = new SockJS("http://localhost:8080/ws");  // Asegúrate de que la URL esté bien configurada
+const socket = new SockJS(`${serverUrl}/ws`);  // Asegúrate de que la URL esté bien configurada
 const stompClient = Stomp.over(socket);
 
 // Conexión al servidor WebSocket
