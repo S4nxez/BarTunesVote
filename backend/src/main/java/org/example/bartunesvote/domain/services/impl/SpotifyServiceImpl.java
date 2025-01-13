@@ -22,13 +22,6 @@ public class SpotifyServiceImpl {
     @Autowired
     private OAuth2AuthorizedClientService authorizedClientService;
 
-    public String getAccessToken(OAuth2AuthenticationToken authentication) {
-        OAuth2AuthorizedClient client = authorizedClientService.loadAuthorizedClient(
-                authentication.getAuthorizedClientRegistrationId(),
-                authentication.getName());
-        return client.getAccessToken().getTokenValue();
-    }
-
     public void playSong(String accessToken, String trackId) {
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
@@ -65,7 +58,7 @@ public class SpotifyServiceImpl {
             Map<String, Object> track = (Map<String, Object>) items.get(index).get("track");
             String songName = (String) track.get("name");
             String trackId = (String) track.get("id");
-            songs.add(new Song(songName, trackId, places[index], BigDecimal.ZERO));
+            songs.add(new Song(songName, trackId, places[index]));
         }
 
         return songs;

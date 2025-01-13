@@ -1,24 +1,33 @@
 package org.example.bartunesvote.ui;
 
+import lombok.extern.log4j.Log4j2;
+import org.example.bartunesvote.Constantes;
 import org.example.bartunesvote.domain.model.Song;
+import org.example.bartunesvote.domain.services.impl.OAuth2TokenService;
 import org.example.bartunesvote.domain.services.impl.SpotifyServiceImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
+
+
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 
 import java.util.List;
 
+
+@Log4j2
 @Controller
 public class SpotifyController {
+    private final SpotifyServiceImpl spotifyService;
+    private final OAuth2TokenService tokenService;
 
-    private SpotifyServiceImpl spotifyService;
-
-    public SpotifyController(SpotifyServiceImpl spotifyService) {
+    public SpotifyController(SpotifyServiceImpl spotifyService,
+                             OAuth2TokenService tokenService) {
         this.spotifyService = spotifyService;
+        this.tokenService = tokenService;
     }
 
     @GetMapping("/login")
@@ -26,25 +35,43 @@ public class SpotifyController {
         return "redirect:/oauth2/authorization/spotify";
     }
 
-    @GetMapping("/songs/{playlistId}")
-    public ResponseEntity<List<Song>> getSongList(@PathVariable String playlistId, OAuth2AuthenticationToken authentication) {
+    @GetMapping("/post-login")
+    public String handlePostLogin() {
+        OAuth2AuthenticationToken authentication =
+                (OAuth2AuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication == null) {
+            throw new IllegalStateException("El token de autenticación es nulo.");
+        }
+        tokenService.storeAccessToken(authentication);
+        return "redirect:/dashboard";
+    }
+    @GetMapping("/songs")
+    public ResponseEntity<?> getSongList() {
         try {
-            String accessToken = spotifyService.getAccessToken(authentication);
-            System.out.println("Access Token: " + accessToken);
-            List<Song> songs = spotifyService.getFourSongsFromPlaylist(accessToken, playlistId);
-            System.out.println("Songs: " + songs);
+            if (!tokenService.isTokenAvailable()) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Access token not available");
+            }
+
+            String accessToken = tokenService.getAccessToken();
+            log.info("Access Token: {}", accessToken);
+
+            List<Song> songs = spotifyService.getFourSongsFromPlaylist(accessToken, Constantes.PLAYLIST_ID);
+            log.info("Songs: {}", songs);
+
             return ResponseEntity.ok(songs);
         } catch (Exception e) {
-            System.err.println("Error al cargar playlist: " + e.getMessage());
-            throw new RuntimeException("Error al cargar playlist: " + e.getMessage());
+            log.error("Error al cargar playlist", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error al cargar playlist: " + e.getMessage());
         }
     }
 
     @GetMapping("/play")
-    public ResponseEntity<String> playSong(OAuth2AuthenticationToken authentication) {
+    public ResponseEntity<String> playSong() {
         try {
+            String accessToken = tokenService.getAccessToken();
             // Obtén el token de acceso del usuario autenticado
-            String accessToken = spotifyService.getAccessToken(authentication);
 
             // ID de la canción a reproducir
             String trackId = "7AraTawVyOl4TpLdDS5FP3";

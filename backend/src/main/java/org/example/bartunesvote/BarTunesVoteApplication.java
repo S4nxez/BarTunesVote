@@ -9,5 +9,4 @@ public class BarTunesVoteApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(BarTunesVoteApplication.class, args);
 	}
-
 }

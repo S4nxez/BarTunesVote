@@ -1,12 +1,6 @@
-// Lista de canciones por defecto (se puede llenar dinámicamente desde el backend)
-let songs = [ //TODO: Ten en cuenta que si los nombres de las canciones tienen caracteres raros como apostrofes igual falla
-    'Bohemian Rhapsody',
-    'Shape of You',
-    'Sweet Child O Mine',
-    'Lose Yourself'
-];
 const urlParams = new URLSearchParams(window.location.search);
 const serverUrl = urlParams.get('server');
+//const serverUrl = 'https://e6b0-90-167-202-198.ngrok-free.app';
 
 let timeRemaining = 60; // Tiempo de votación en segundos
 let interval;
@@ -15,74 +9,83 @@ let votingEnabled = true;
 
 // Cargar las canciones en la vista
 function loadSongs(playlistId) {
-const songListDiv = document.getElementById('song-list');
-	fetch(`${serverUrl}/songs/${playlistId}`, {
-		method: 'GET',
-		credentials: 'include',
-		headers: {
-			'Authorization': `Bearer ${accessToken}`,
-			'Content-Type': 'application/json',
-		},
-	})
-	.then(response => {
-		console.log('Response:', response);
-		return response.json();
-	})
-	.then(songsData => {
-		songsData.forEach(song => {
-			const card = document.createElement('div');
-			card.classList.add('card');
-			card.setAttribute('onclick', `vote('${song.songId}')`);
-			card.innerHTML = `
-				<div class="card-body">
-					<div class="song-container">
-						<p class="song-title">${song.songName}</p>
-					</div>
-				</div>
-			`;
-			songListDiv.appendChild(card);
-		});
-	})
-	.catch(error => {
-		console.error('Error loading songs:', error);
-		songListDiv.innerHTML = '<p>Error loading songs from playlist</p>';
-	});
+    const songListDiv = document.getElementById('song-list');
+    fetch(`${serverUrl}/songs`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+			"ngrok-skip-browser-warning": "1231"
+        },
+    })
+    .then(response => {
+        console.log('Response:', response);
+        return response.json();
+    })
+    .then(songsData => {
+        // Ensure songsData is an array
+        const songsArray = Array.isArray(songsData) ? songsData : [songsData];
+
+        songListDiv.innerHTML = ''; // Clear existing content
+
+        songsArray.forEach(song => {
+            const card = document.createElement('div');
+            card.classList.add('card');
+            card.setAttribute('onclick', `vote('${song.place}')`);
+            card.innerHTML = `
+                <div class="card-body">
+                    <div class="song-container">
+                        <p class="song-title">${song.songName}</p>
+                    </div>
+                </div>
+            `;
+            songListDiv.appendChild(card);
+        });
+    })
+    .catch(error => {
+        console.error('Error loading songs:', error);
+        songListDiv.innerHTML = '<p>Error loading songs from playlist</p>';
+    });
 }
 
 function generateSessionId() {
-	if (!localStorage.getItem('sessionId')) {
-	  localStorage.setItem('sessionId', crypto.randomUUID());
-	}
-	return localStorage.getItem('sessionId');
+    if (!localStorage.getItem('sessionId')) {
+        const array = new Uint32Array(4);
+        window.crypto.getRandomValues(array);
+        const sessionId = Array.from(array, dec => ('0' + dec.toString(16)).substr(-2)).join('');
+        localStorage.setItem('sessionId', sessionId);
+    }
+    return localStorage.getItem('sessionId');
 }
 
 // Función para votar por una canción
-function vote(songId) {
+function vote(placeUi) {
     if (!votingEnabled) {
         alert("El tiempo de votación ha terminado.");
         return;
     }
+	var voteUI = {
+		place: placeUi,
+		sessionId: sessionId
+	}
     fetch(`${serverUrl}/api/vote`, {
         method: 'POST',
+
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-            songId: songId,
-            sessionId: sessionId
-        }),
+        body: JSON.stringify(voteUI)
     })
     .then(response => {
         if (response.ok) {
             alert('Voto registrado exitosamente.');
         } else {
-            return response.json().then(errorData => {
-                alert(errorData.message || 'Error desconocido');
+            return response.text().then(errorText => {
+                const errorMessage = errorText ? JSON.parse(errorText).message : 'Error desconocido';
+                alert(errorMessage);
             });
         }
     })
     .catch(error => {
         alert('Error al registrar el voto: ' + error);
     });
-    // Aquí enviaría el voto al backend para registrar la votación.
 }
 
 // Función para añadir una nueva canción
@@ -121,6 +124,7 @@ function getWinner() {
 		*/
 		fetch(`${serverUrl}/api/vote`, {
 			method: 'GET',
+
 			headers: { 'Content-Type': 'application/json' },
 		  }).then(response => {
 			if (response.ok) {
@@ -144,7 +148,7 @@ function resetVotes() {
         voteService.resetVotes();
     }
 	*/
-	fetch(`${serverUrl}/`, {
+	fetch(`${serverUrl}/api/vote`, {
 		method: 'DELETE',
 		headers: { 'Content-Type': 'application/json' },
 	  }).then(response => {

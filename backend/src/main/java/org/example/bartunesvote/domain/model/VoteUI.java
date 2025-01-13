@@ -4,6 +4,6 @@ import lombok.Data;
 
 @Data
 public class VoteUI {
-    private String songId;
+    private String place;
     private String sessionId;
 }
