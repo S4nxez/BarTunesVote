@@ -79,7 +79,6 @@ public class SpotifyController {
     @GetMapping("/play/{playlistId}")
     public ResponseEntity<String> playSong(@PathVariable String playlistId) {
         try {
-
             this.playlistId = playlistId;
             System.out.println(playlistId);
             spotifyService.setFourSongsFromPlaylist(playlistId);

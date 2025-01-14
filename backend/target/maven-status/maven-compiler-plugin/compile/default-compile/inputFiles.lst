@@ -1,0 +1,17 @@
+C:\Users\cobra\OneDrive\Documentos\GitHub\BarTunesVote\backend\src\main\java\org\example\bartunesvote\BarTunesVoteApplication.java
+C:\Users\cobra\OneDrive\Documentos\GitHub\BarTunesVote\backend\src\main\java\org\example\bartunesvote\common\AuthenticationDebugger.java
+C:\Users\cobra\OneDrive\Documentos\GitHub\BarTunesVote\backend\src\main\java\org\example\bartunesvote\common\SecurityConfig.java
+C:\Users\cobra\OneDrive\Documentos\GitHub\BarTunesVote\backend\src\main\java\org\example\bartunesvote\common\WebSocketConfig.java
+C:\Users\cobra\OneDrive\Documentos\GitHub\BarTunesVote\backend\src\main\java\org\example\bartunesvote\Constantes.java
+C:\Users\cobra\OneDrive\Documentos\GitHub\BarTunesVote\backend\src\main\java\org\example\bartunesvote\domain\model\Song.java
+C:\Users\cobra\OneDrive\Documentos\GitHub\BarTunesVote\backend\src\main\java\org\example\bartunesvote\domain\model\SongCard.java
+C:\Users\cobra\OneDrive\Documentos\GitHub\BarTunesVote\backend\src\main\java\org\example\bartunesvote\domain\model\VoteUI.java
+C:\Users\cobra\OneDrive\Documentos\GitHub\BarTunesVote\backend\src\main\java\org\example\bartunesvote\domain\services\impl\GlobalTokenService.java
+C:\Users\cobra\OneDrive\Documentos\GitHub\BarTunesVote\backend\src\main\java\org\example\bartunesvote\domain\services\impl\OAuth2TokenService.java
+C:\Users\cobra\OneDrive\Documentos\GitHub\BarTunesVote\backend\src\main\java\org\example\bartunesvote\domain\services\impl\SpotifyServiceImpl.java
+C:\Users\cobra\OneDrive\Documentos\GitHub\BarTunesVote\backend\src\main\java\org\example\bartunesvote\domain\services\impl\VoteServiceImpl.java
+C:\Users\cobra\OneDrive\Documentos\GitHub\BarTunesVote\backend\src\main\java\org\example\bartunesvote\domain\services\VoteService.java
+C:\Users\cobra\OneDrive\Documentos\GitHub\BarTunesVote\backend\src\main\java\org\example\bartunesvote\ui\DynamicScheduler.java
+C:\Users\cobra\OneDrive\Documentos\GitHub\BarTunesVote\backend\src\main\java\org\example\bartunesvote\ui\middleware\OAuth2TokenFilter.java
+C:\Users\cobra\OneDrive\Documentos\GitHub\BarTunesVote\backend\src\main\java\org\example\bartunesvote\ui\SpotifyController.java
+C:\Users\cobra\OneDrive\Documentos\GitHub\BarTunesVote\backend\src\main\java\org\example\bartunesvote\ui\VoteController.java

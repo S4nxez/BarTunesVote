@@ -1,0 +1,17 @@
+org\example\bartunesvote\domain\services\impl\OAuth2TokenService.class
+org\example\bartunesvote\domain\services\impl\SpotifyServiceImpl.class
+org\example\bartunesvote\common\AuthenticationDebugger.class
+org\example\bartunesvote\common\WebSocketConfig.class
+org\example\bartunesvote\domain\services\VoteService.class
+org\example\bartunesvote\common\SecurityConfig.class
+org\example\bartunesvote\Constantes.class
+org\example\bartunesvote\BarTunesVoteApplication.class
+org\example\bartunesvote\domain\services\impl\VoteServiceImpl.class
+org\example\bartunesvote\domain\model\SongCard.class
+org\example\bartunesvote\domain\model\VoteUI.class
+org\example\bartunesvote\ui\middleware\OAuth2TokenFilter.class
+org\example\bartunesvote\ui\SpotifyController.class
+org\example\bartunesvote\domain\model\Song.class
+org\example\bartunesvote\domain\services\impl\GlobalTokenService.class
+org\example\bartunesvote\ui\DynamicScheduler.class
+org\example\bartunesvote\ui\VoteController.class

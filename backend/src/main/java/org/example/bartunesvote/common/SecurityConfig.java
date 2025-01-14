@@ -28,7 +28,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.cors().configurationSource(corsConfigurationSource()).and()
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/", "/login", "/oauth2/**").permitAll() // Rutas públicas
+                        .requestMatchers("/", "/login", "/oauth2/**", "/ws").permitAll() // Rutas públicas
                         .requestMatchers("/api/vote").permitAll() // Rutas protegidas
                         .anyRequest().permitAll() // Permitir todas las demás rutas
                 )
