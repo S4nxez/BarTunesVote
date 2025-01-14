@@ -1,12 +1,12 @@
 const urlParams = new URLSearchParams(window.location.search);
 const serverUrl = urlParams.get("server");
 
-let timeRemaining = 60; // Tiempo de votación en segundos
+
 let interval;
 let sessionId;
 let votingEnabled = true;
 
-const socket = new SockJS(`${serverUrl}/ws`);  // Asegúrate de que la URL esté bien configurada
+const socket = new SockJS(`${serverUrl}/ws`, null, { withCredentials: false });
 const stompClient = Stomp.over(socket);
 
 // Conexión al servidor WebSocket
@@ -122,20 +122,6 @@ function addSong() {
   }
 }
 
-// Actualizar el tiempo restante y deshabilitar votación cuando termine
-function updateTime() {
-  if (timeRemaining <= 0) {
-    clearInterval(interval);
-    votingEnabled = false; // Desactivar votación
-    document.getElementById("time-remaining").innerText = "Votación finalizada";
-  } else {
-    document.getElementById("time-remaining").innerText = `Tiempo: ${formatTime(
-      timeRemaining
-    )}`;
-    timeRemaining--;
-  }
-}
-
 function getWinner() {
   /*@CrossOrigin(origins = "https://s4nxez.github.io/BarTunesVote/")
     @GetMapping
@@ -197,21 +183,9 @@ function resetVotes() {
     });
 }
 
-// Formatear el tiempo a MM:SS
-function formatTime(seconds) {
-  const minutes = Math.floor(seconds / 60);
-  const sec = seconds % 60;
-  return `${String(minutes).padStart(2, "0")}:${String(sec).padStart(2, "0")}`;
-}
-
-// Iniciar el contador de tiempo
-function startVotingTimer() {
-  interval = setInterval(updateTime, 1000);
-}
 
 // Llamar a la función para cargar las canciones y comenzar el temporizador al cargar la página
 window.onload = function () {
   loadSongs();
-  startVotingTimer();
   sessionId = generateSessionId();
 };

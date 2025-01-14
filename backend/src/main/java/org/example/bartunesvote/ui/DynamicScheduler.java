@@ -18,7 +18,7 @@ public class DynamicScheduler {
     private final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
     private final VoteServiceImpl voteServiceImpl;
     private int songDuration = 10; // Duración inicial en segundos
-
+    private String playlistId;
     private final SpotifyServiceImpl spotifyServiceImpl;
 
     @Autowired
@@ -29,7 +29,8 @@ public class DynamicScheduler {
         this.voteServiceImpl = voteServiceImpl;
     }
 
-    public void start() {
+    public void start(String playlistId) {
+        this.playlistId = playlistId;
         scheduler.schedule(this::playSong, 0, TimeUnit.SECONDS); // Comienza inmediatamente
     }
 
@@ -40,7 +41,7 @@ public class DynamicScheduler {
                 .findFirst().get();
         this.songDuration = spotifyServiceImpl.getTrackDurationInSeconds(winnerSong.getSongId());
         spotifyServiceImpl.playSong(winnerSong.getSongId());
-        spotifyServiceImpl.setFourSongsFromPlaylist();
+        spotifyServiceImpl.setFourSongsFromPlaylist(playlistId);
         messagingTemplate.convertAndSend("/topic/updates", "Trigger GET request");
         // Programa la siguiente tarea al final de la canción
         scheduler.schedule(this::handleEndOfSong, songDuration, TimeUnit.SECONDS);

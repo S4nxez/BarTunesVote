@@ -45,7 +45,7 @@ h2 {
     text-align: center;
     font-weight: bold;
     margin-bottom: 20px;
-    color: #fcbdd1;
+    color: #ffe9f0;
     text-shadow: 0 0 15px #ff1550, 0 0 30px #ff1550;
 }
 
@@ -59,7 +59,7 @@ h4 {
 #song-list {
     margin-bottom: 20px;
     padding: 10px;
-    border: 1px solid #2f2f42;
+    border: 1px solid #65658f;
     border-radius: 5px;
     background: #131313;
     box-shadow: 0 0 5px #16164b inset;

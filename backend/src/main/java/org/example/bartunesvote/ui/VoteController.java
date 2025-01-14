@@ -21,18 +21,10 @@ import java.util.Collections;
 @RequestMapping("/api/vote")
 public class VoteController {
     private final VoteService voteService;
-    private final SpotifyServiceImpl spotifyServiceImpl;
-    private final OAuth2TokenService tokenService;
 
 
-    public VoteController(VoteService voteService,
-                          SpotifyServiceImpl spotifyServiceImpl,
-                          OAuth2TokenService tokenService
-    ){
+    public VoteController(VoteService voteService){
         this.voteService=voteService;
-        this.spotifyServiceImpl = spotifyServiceImpl;
-        this.tokenService = tokenService;
-
     }
 
     @PostMapping

@@ -1,5 +1,6 @@
 package org.example.bartunesvote.ui;
 
+import jakarta.websocket.server.PathParam;
 import lombok.extern.log4j.Log4j2;
 import org.example.bartunesvote.Constantes;
 import org.example.bartunesvote.domain.model.Song;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 
@@ -26,6 +28,7 @@ public class SpotifyController {
     private final OAuth2TokenService tokenService;
     private final DynamicScheduler dynamicScheduler;
     private final VoteServiceImpl voteServiceImpl;
+    private String playlistId;
 
     public SpotifyController(SpotifyServiceImpl spotifyService,
                              OAuth2TokenService tokenService,
@@ -46,11 +49,10 @@ public class SpotifyController {
         OAuth2AuthenticationToken authentication =
                 (OAuth2AuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
 
-        if (authentication == null) {
+        if (authentication == null)
             throw new IllegalStateException("El token de autenticación es nulo.");
-        }
         tokenService.storeAccessToken(authentication);
-        spotifyService.setFourSongsFromPlaylist();
+        dynamicScheduler.start(this.playlistId);
         return "redirect:/dashboard";
     }
     @GetMapping("/songs")
@@ -74,10 +76,14 @@ public class SpotifyController {
         }
     }
 
-    @GetMapping("/play")
-    public ResponseEntity<String> playSong() {
+    @GetMapping("/play/{playlistId}")
+    public ResponseEntity<String> playSong(@PathVariable String playlistId) {
         try {
-            dynamicScheduler.start();
+
+            this.playlistId = playlistId;
+            System.out.println(playlistId);
+            spotifyService.setFourSongsFromPlaylist(playlistId);
+            dynamicScheduler.start(this.playlistId);
             return ResponseEntity.ok("La canción se está reproduciendo en tu cuenta de Spotify.");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)

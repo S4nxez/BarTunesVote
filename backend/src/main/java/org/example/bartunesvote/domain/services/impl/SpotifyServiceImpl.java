@@ -76,7 +76,7 @@ public class SpotifyServiceImpl {
         return canciones;
     }
 
-    public void setFourSongsFromPlaylist() {
+    public void setFourSongsFromPlaylist(String playlistId) {
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
         headers.setBearerAuth(tokenService.getAccessToken());
@@ -84,7 +84,7 @@ public class SpotifyServiceImpl {
 
         HttpEntity<String> entity = new HttpEntity<>(headers);
 
-        String url = "https://api.spotify.com/v1/playlists/" +  Constantes.PLAYLIST_ID + "/tracks"; // Añadí "/tracks" al final
+        String url = "https://api.spotify.com/v1/playlists/" +  playlistId + "/tracks"; // Añadí "/tracks" al final
         Map<String, Object> response = restTemplate.exchange(url, HttpMethod.GET, entity, Map.class).getBody();
 
         List<Map<String, Object>> items = (List<Map<String, Object>>) response.get("items");
@@ -93,11 +93,18 @@ public class SpotifyServiceImpl {
         int index = 0;
         Random random = new Random();
 
-        for (; index<4;index++ ) {
-            Map<String, Object> track = (Map<String, Object>) items.get(random.nextInt(items.size())).get("track");
+        Set<String> addedSongNames = new HashSet<>();
+        for (; index < 4; ) {
+            Map<String, Object> track = (Map<String, Object>) items
+                    .get(random.nextInt(items.size())).get("track");
             String songName = (String) track.get("name");
             String trackId = (String) track.get("id");
-            songs.add(new Song(songName, trackId, places[index]));
+
+            if (!addedSongNames.contains(songName)) {
+                songs.add(new Song(songName, trackId, places[index]));
+                addedSongNames.add(songName);
+                index++;
+            }
         }
 
         this.canciones = songs;
