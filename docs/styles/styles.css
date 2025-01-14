@@ -30,6 +30,12 @@ body {
     background: #131313;
     box-shadow: 0 0 10px #2222b6;
 }
+.detalle {
+	font-family: megalona !important;
+	font-size: 1.5rem;
+	color: #fcf5de;
+    text-shadow: 0 0 15px #b69b22, 0 0 30px #b69b22;
+}
 
 h2 {
 
@@ -63,6 +69,17 @@ h4 {
     border-radius: 5px;
     background: #131313;
     box-shadow: 0 0 5px #16164b inset;
+}
+
+.song-details {
+    transform: translateY(-10%);
+    padding: 20px;
+    border: 1px solid #d1d1fe;
+	color: #d1d1fe;
+    border-radius: 10px;
+    background: #272727;
+    box-shadow: 0 0 10px #2222b6;
+    font-size: 0.9rem;
 }
 
 .card {

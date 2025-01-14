@@ -99,9 +99,9 @@ public class SpotifyServiceImpl {
                     .get(random.nextInt(items.size())).get("track");
             String songName = (String) track.get("name");
             String trackId = (String) track.get("id");
-
+            String artistName = (String) ((Map<String, Object>) ((List<Object>) track.get("artists")).get(0)).get("name");
             if (!addedSongNames.contains(songName)) {
-                songs.add(new Song(songName, trackId, places[index]));
+                songs.add(new Song(songName, artistName,trackId, places[index]));
                 addedSongNames.add(songName);
                 index++;
             }

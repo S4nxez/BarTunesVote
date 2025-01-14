@@ -23,6 +23,8 @@ stompClient.connect({}, function (frame) {
 // Cargar las canciones en la vista
 function loadSongs() {
   const songListDiv = document.getElementById("song-list");
+  const songDetailsDiv = document.getElementById("song-details");
+
   fetch(`${serverUrl}/songs`, {
     method: "GET",
     headers: {
@@ -39,6 +41,7 @@ function loadSongs() {
       const songsArray = Array.isArray(songsData) ? songsData : [songsData];
 
       songListDiv.innerHTML = ""; // Clear existing content
+	  songDetailsDiv.innerHTML = "";
 
       songsArray.forEach((song) => {
         const card = document.createElement("div");
@@ -52,6 +55,10 @@ function loadSongs() {
                 </div>
             `;
         songListDiv.appendChild(card);
+
+        const detailLine = document.createElement("p");
+        detailLine.textContent = `${song.songName} - ${song.artistName}`;
+        songDetailsDiv.appendChild(detailLine);
       });
     })
     .catch((error) => {
