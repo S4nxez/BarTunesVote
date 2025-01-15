@@ -79,8 +79,9 @@
 
 A continuación, se incluye una captura de pantalla de la interfaz móvil para que puedas visualizar cómo los usuarios interactúan con la aplicación:
 
-![Captura de pantalla desde un móvil](imgs/frontend.jpg)
-
+<div align="center">
+<img src="imgs/frontend.jpg" alt="Captura de pantalla desde un móvil" height="500">
+</div>
 ---
 
 ## Contribuciones
