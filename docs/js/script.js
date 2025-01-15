@@ -192,8 +192,8 @@ function resetVotes() {
 
 // Recargar la página cada 5 segundos
 setInterval(() => {
-	location.reload(); // Recarga la página actual
-  }, 15000); // Intervalo de 5000 ms (5 segundos)
+	loadSongs(); // Recarga la página actual
+  }, 10000); // Intervalo de 5000 ms (5 segundos)
 
 
 // Llamar a la función para cargar las canciones y comenzar el temporizador al cargar la página

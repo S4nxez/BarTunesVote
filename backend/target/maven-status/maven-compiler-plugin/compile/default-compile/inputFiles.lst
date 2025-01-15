@@ -9,6 +9,7 @@ C:\Users\cobra\OneDrive\Documentos\GitHub\BarTunesVote\backend\src\main\java\org
 C:\Users\cobra\OneDrive\Documentos\GitHub\BarTunesVote\backend\src\main\java\org\example\bartunesvote\domain\services\impl\GlobalTokenService.java
 C:\Users\cobra\OneDrive\Documentos\GitHub\BarTunesVote\backend\src\main\java\org\example\bartunesvote\domain\services\impl\OAuth2TokenService.java
 C:\Users\cobra\OneDrive\Documentos\GitHub\BarTunesVote\backend\src\main\java\org\example\bartunesvote\domain\services\impl\SpotifyServiceImpl.java
+C:\Users\cobra\OneDrive\Documentos\GitHub\BarTunesVote\backend\src\main\java\org\example\bartunesvote\domain\services\impl\SpotifyTokenResponse.java
 C:\Users\cobra\OneDrive\Documentos\GitHub\BarTunesVote\backend\src\main\java\org\example\bartunesvote\domain\services\impl\VoteServiceImpl.java
 C:\Users\cobra\OneDrive\Documentos\GitHub\BarTunesVote\backend\src\main\java\org\example\bartunesvote\domain\services\VoteService.java
 C:\Users\cobra\OneDrive\Documentos\GitHub\BarTunesVote\backend\src\main\java\org\example\bartunesvote\ui\DynamicScheduler.java

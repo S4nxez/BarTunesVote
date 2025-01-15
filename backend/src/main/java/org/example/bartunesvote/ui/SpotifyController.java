@@ -52,7 +52,6 @@ public class SpotifyController {
         if (authentication == null)
             throw new IllegalStateException("El token de autenticación es nulo.");
         tokenService.storeAccessToken(authentication);
-        dynamicScheduler.start(this.playlistId);
         return "redirect:/dashboard";
     }
     @GetMapping("/songs")

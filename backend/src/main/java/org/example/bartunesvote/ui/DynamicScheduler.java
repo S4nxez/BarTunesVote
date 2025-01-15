@@ -53,8 +53,4 @@ public class DynamicScheduler {
         // Lógica para manejar fin de la canción
         playSong(); // Llama al siguiente ciclo
     }
-
-    public void stop() {
-        scheduler.shutdown();
-    }
 }

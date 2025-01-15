@@ -13,5 +13,6 @@ org\example\bartunesvote\ui\middleware\OAuth2TokenFilter.class
 org\example\bartunesvote\ui\SpotifyController.class
 org\example\bartunesvote\domain\model\Song.class
 org\example\bartunesvote\domain\services\impl\GlobalTokenService.class
+org\example\bartunesvote\domain\services\impl\SpotifyTokenResponse.class
 org\example\bartunesvote\ui\DynamicScheduler.class
 org\example\bartunesvote\ui\VoteController.class
