@@ -1,5 +1,6 @@
 package org.example.bartunesvote.domain.services.impl;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
@@ -14,27 +15,21 @@ import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
 
-
+@RequiredArgsConstructor
 @Service
 public class OAuth2TokenService {
 
     private final OAuth2AuthorizedClientService authorizedClientService;
     private final GlobalTokenService globalTokenService;
 
-    public OAuth2TokenService(OAuth2AuthorizedClientService authorizedClientService,
-                              GlobalTokenService globalTokenService) {
-        this.authorizedClientService = authorizedClientService;
-        this.globalTokenService = globalTokenService;
-    }
-
     public void storeAccessToken(OAuth2AuthenticationToken authentication) {
         OAuth2AuthorizedClient client = authorizedClientService.loadAuthorizedClient(
                 authentication.getAuthorizedClientRegistrationId(),
                 authentication.getName()
         );
-        if (client != null && client.getAccessToken() != null) {
+
+        if (client != null && client.getAccessToken() != null)
             globalTokenService.storeAccessToken(client.getAccessToken().getTokenValue());
-        }
     }
 
     public String getAccessToken() {
