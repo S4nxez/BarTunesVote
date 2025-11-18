@@ -1,13 +1,10 @@
 package org.example.bartunesvote.ui;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.example.bartunesvote.Constantes;
-import org.example.bartunesvote.domain.model.Song;
 import org.example.bartunesvote.domain.model.SongCard;
 import org.example.bartunesvote.domain.model.VoteUI;
 import org.example.bartunesvote.domain.services.VoteService;
-import org.example.bartunesvote.domain.services.impl.OAuth2TokenService;
-import org.example.bartunesvote.domain.services.impl.SpotifyServiceImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -17,25 +14,18 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.Collections;
 
 @Log4j2
+@RequiredArgsConstructor
 @Controller
 @RequestMapping("/api/vote")
 public class VoteController {
     private final VoteService voteService;
 
-
-    public VoteController(VoteService voteService){
-        this.voteService=voteService;
-    }
-
     @PostMapping
     public ResponseEntity<Object> add(@RequestBody  VoteUI voteUI) throws ResponseStatusException {
-        log.info("solicitud de voto recibida: {}", voteUI);
-        if (!voteService.add(voteUI)) {
+        if (!voteService.add(voteUI))
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)
                     .body(Collections.singletonMap("message", "Ya has votado"));
-        }
-        log.info("Voto recibido: {}", voteUI);
         return ResponseEntity.ok().build();
     }
 

@@ -47,8 +47,7 @@ public class VoteServiceImpl implements VoteService {
         Optional<String> sessionOpt = sesiones.stream().filter(session ->
                                 session.equals(voteUI.getSessionId())).findFirst();
 
-        if (sessionOpt.isPresent())
-            return false;
+        if (sessionOpt.isPresent()) return false;
         sesiones.add(voteUI.getSessionId());
 
         canciones.stream().filter(cancion ->

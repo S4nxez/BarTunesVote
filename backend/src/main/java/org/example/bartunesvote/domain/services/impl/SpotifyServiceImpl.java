@@ -1,22 +1,18 @@
 package org.example.bartunesvote.domain.services.impl;
 
-import org.example.bartunesvote.Constantes;
+import lombok.Getter;
 import org.example.bartunesvote.domain.model.Song;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
-import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
-import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
-import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.math.BigDecimal;
 import java.util.*;
 
 @Service
 public class SpotifyServiceImpl {
     private static final String SPOTIFY_PLAY_URL = "https://api.spotify.com/v1/me/player/play";
 
+    @Getter
     private List<Song> canciones;
 
     private final OAuth2TokenService tokenService;
@@ -24,9 +20,6 @@ public class SpotifyServiceImpl {
     public SpotifyServiceImpl(OAuth2TokenService tokenService) {
         this.tokenService = tokenService;
     }
-
-    @Autowired
-    private OAuth2AuthorizedClientService authorizedClientService;
 
 
     public void playSong( String trackId) {
@@ -71,11 +64,6 @@ public class SpotifyServiceImpl {
         throw new IllegalStateException("No se pudo obtener la duración del track.");
     }
 
-
-    public List<Song> getCanciones(){
-        return canciones;
-    }
-
     public void setFourSongsFromPlaylist(String playlistId) {
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
@@ -94,12 +82,12 @@ public class SpotifyServiceImpl {
         Random random = new Random();
 
         Set<String> addedSongNames = new HashSet<>();
-        for (; index < 4; ) {
+        while (index < 4) {
             Map<String, Object> track = (Map<String, Object>) items
                     .get(random.nextInt(items.size())).get("track");
             String songName = (String) track.get("name");
             String trackId = (String) track.get("id");
-            String artistName = (String) ((Map<String, Object>) ((List<Object>) track.get("artists")).get(0)).get("name");
+            String artistName = (String) ((Map<String, Object>) ((List<Object>) track.get("artists")).getFirst()).get("name");
             if (!addedSongNames.contains(songName)) {
                 songs.add(new Song(songName, artistName,trackId, places[index]));
                 addedSongNames.add(songName);
