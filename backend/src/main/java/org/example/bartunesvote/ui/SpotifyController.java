@@ -36,9 +36,10 @@ public class SpotifyController {
 
         if (authentication == null)
             throw new IllegalStateException("El token de autenticación es nulo.");
-        tokenService.storeAccessToken(authentication);
+        tokenService.storeTokensFromAuthentication(authentication);
         return "redirect:" + Constantes.DASHBOARD_URL;
     }
+
     @GetMapping("/songs")
     public ResponseEntity<List<Song>> getSongList() {
         try {

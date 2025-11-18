@@ -1,11 +1,13 @@
 package org.example.bartunesvote.common;
 
+import lombok.RequiredArgsConstructor;
+import org.example.bartunesvote.ui.middleware.OAuth2TokenFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
-import org.springframework.security.oauth2.client.web.OAuth2AuthorizedClientRepository;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -13,36 +15,30 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import java.util.Arrays;
 
 @Configuration
+@RequiredArgsConstructor
 public class SecurityConfig {
 
-    private final ClientRegistrationRepository clientRegistrationRepository;
-    private final OAuth2AuthorizedClientRepository authorizedClientRepository;
-
-    public SecurityConfig(ClientRegistrationRepository clientRegistrationRepository,
-                          OAuth2AuthorizedClientRepository authorizedClientRepository) {
-        this.clientRegistrationRepository = clientRegistrationRepository;
-        this.authorizedClientRepository = authorizedClientRepository;
-    }
+        private final OAuth2TokenFilter oAuth2TokenFilter;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.cors().configurationSource(corsConfigurationSource()).and()
+        http.cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/", "/login", "/oauth2/**", "/ws").permitAll() // Rutas públicas
-                        .requestMatchers("/api/vote").permitAll() // Rutas protegidas
-                        .anyRequest().permitAll() // Permitir todas las demás rutas
+                        .requestMatchers("/", "/login", "/oauth2/**", "/ws", "/post-login").permitAll()
+                        .requestMatchers("/api/vote/**").permitAll()
+                        .anyRequest().permitAll()
                 )
                 .oauth2Login(oauth2 -> oauth2
                         .loginPage("/login")
-                        .defaultSuccessUrl("/post-login", true) // Redirige tras login exitoso
+                        .defaultSuccessUrl("/post-login", true)
                         .failureUrl("/login?error=true")
                 )
-                .exceptionHandling()
-                .authenticationEntryPoint((request, response, authException) ->
-                        response.sendRedirect("/login")
+                .oauth2Client(Customizer.withDefaults())
+                .exceptionHandling(exception -> exception
+                        .authenticationEntryPoint((request, response, authException) -> response.sendRedirect("/login"))
                 )
-                .and()
-                .csrf().disable(); // Deshabilitar CSRF para API REST
+                .csrf(csrf -> csrf.disable())
+                .addFilterAfter(oAuth2TokenFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
@@ -50,20 +46,20 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:5501","https://s4nxez.github.io")); // Origen permitido
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS")); // Métodos permitidos
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:5501","https://s4nxez.github.io"));
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList(
                 "Authorization",
                 "Cache-Control",
                 "Content-Type",
-                "ngrok-skip-browser-warning" // Agregar encabezado personalizado aquí
+                "ngrok-skip-browser-warning"
         ));
         configuration.setAllowCredentials(true); // Permitir credenciales
         configuration.setExposedHeaders(Arrays.asList(
                 "Authorization",
                 "Cache-Control",
                 "Content-Type",
-                "ngrok-skip-browser-warning" // Asegurar que este encabezado esté expuesto
+                "ngrok-skip-browser-warning"
         ));
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

@@ -23,7 +23,7 @@ public class OAuth2TokenFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response,
                                     @NonNull FilterChain filterChain) throws IOException, ServletException {
-        String token = tokenService.getAccessToken();
+        String token = tokenService.isTokenAvailable() ? tokenService.getAccessToken() : null;
         if (token != null) response.setHeader("Authorization", "Bearer " + token);
         response.setHeader("ngrok-skip-browser-warning", "1231");
         filterChain.doFilter(request, response);
