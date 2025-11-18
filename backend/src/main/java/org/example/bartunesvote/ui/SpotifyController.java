@@ -1,47 +1,32 @@
 package org.example.bartunesvote.ui;
 
-import jakarta.websocket.server.PathParam;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.example.bartunesvote.Constantes;
 import org.example.bartunesvote.domain.model.Song;
 import org.example.bartunesvote.domain.services.impl.OAuth2TokenService;
 import org.example.bartunesvote.domain.services.impl.SpotifyServiceImpl;
-import org.example.bartunesvote.domain.services.impl.VoteServiceImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-
-
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.example.bartunesvote.common.Constantes;
 
 import java.util.List;
 
-
 @Log4j2
+@RequiredArgsConstructor
 @Controller
 public class SpotifyController {
     private final SpotifyServiceImpl spotifyService;
     private final OAuth2TokenService tokenService;
     private final DynamicScheduler dynamicScheduler;
-    private final VoteServiceImpl voteServiceImpl;
-    private String playlistId;
-
-    public SpotifyController(SpotifyServiceImpl spotifyService,
-                             OAuth2TokenService tokenService,
-                             DynamicScheduler dynamicScheduler, VoteServiceImpl voteServiceImpl) {
-        this.spotifyService = spotifyService;
-        this.tokenService = tokenService;
-        this.dynamicScheduler = dynamicScheduler;
-        this.voteServiceImpl = voteServiceImpl;
-    }
 
     @GetMapping("/login")
     public String login() {
-        return "redirect:/oauth2/authorization/spotify";
+        return "redirect:" + Constantes.AUTHORIZATION_URL;
     }
 
     @GetMapping("/post-login")
@@ -51,37 +36,27 @@ public class SpotifyController {
 
         if (authentication == null)
             throw new IllegalStateException("El token de autenticación es nulo.");
-        tokenService.storeAccessToken(authentication);
-        return "redirect:/dashboard";
+        tokenService.storeTokensFromAuthentication(authentication);
+        return "redirect:" + Constantes.DASHBOARD_URL;
     }
+
     @GetMapping("/songs")
-    public ResponseEntity<?> getSongList() {
+    public ResponseEntity<List<Song>> getSongList() {
         try {
-            if (!tokenService.isTokenAvailable()) {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Access token not available");
-            }
-
-            String accessToken = tokenService.getAccessToken();
-            log.info("Access Token: {}", accessToken);
-
-            List<Song> songs = spotifyService.getCanciones();
-            log.info("Songs: {}", songs);
-
-            return ResponseEntity.ok(songs);
+            return  (!tokenService.isTokenAvailable())
+                    ? ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(List.of())
+                    : ResponseEntity.ok(spotifyService.getCanciones());
         } catch (Exception e) {
-            log.error("Error al cargar playlist", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Error al cargar playlist: " + e.getMessage());
+            log.error("Error al cargar playlist ", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(List.of());
         }
     }
 
     @GetMapping("/play/{playlistId}")
     public ResponseEntity<String> playSong(@PathVariable String playlistId) {
         try {
-            this.playlistId = playlistId;
-            System.out.println(playlistId);
             spotifyService.setFourSongsFromPlaylist(playlistId);
-            dynamicScheduler.start(this.playlistId);
+            dynamicScheduler.start(playlistId);
             return ResponseEntity.ok("La canción se está reproduciendo en tu cuenta de Spotify.");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
