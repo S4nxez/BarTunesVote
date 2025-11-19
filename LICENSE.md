@@ -1,10 +1,10 @@
 # Licencia de Uso Privado o Comercial
 
-Fecha de creación: [Inserta la fecha actual]
+Fecha de creación: 3 de enero del 2025
 
 ## Términos y Condiciones
 
-Este software y sus archivos asociados ("Software") están protegidos por derechos de autor y son propiedad exclusiva del autor, [Tu Nombre o Nombre del Proyecto]. Al acceder, descargar o utilizar este Software, aceptas los términos y condiciones descritos a continuación.
+Este software y sus archivos asociados ("Software") están protegidos por derechos de autor y son propiedad exclusiva del autor, BarTunesVote. Al acceder, descargar o utilizar este Software, aceptas los términos y condiciones descritos a continuación.
 
 ### 1. Uso Permitido
 1.1. El Software puede ser utilizado únicamente para:

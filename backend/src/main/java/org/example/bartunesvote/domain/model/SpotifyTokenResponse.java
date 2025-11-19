@@ -1,4 +1,4 @@
-package org.example.bartunesvote.domain.services.impl;
+package org.example.bartunesvote.domain.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
