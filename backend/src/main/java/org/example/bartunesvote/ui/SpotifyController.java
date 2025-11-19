@@ -2,9 +2,10 @@ package org.example.bartunesvote.ui;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.example.bartunesvote.common.Constantes;
 import org.example.bartunesvote.domain.model.Song;
+import org.example.bartunesvote.domain.services.SpotifyService;
 import org.example.bartunesvote.domain.services.impl.OAuth2TokenService;
-import org.example.bartunesvote.domain.services.impl.SpotifyServiceImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -12,7 +13,6 @@ import org.springframework.security.oauth2.client.authentication.OAuth2Authentic
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.example.bartunesvote.common.Constantes;
 
 import java.util.List;
 
@@ -20,7 +20,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Controller
 public class SpotifyController {
-    private final SpotifyServiceImpl spotifyService;
+    private final SpotifyService spotifyService;
     private final OAuth2TokenService tokenService;
     private final DynamicScheduler dynamicScheduler;
 
