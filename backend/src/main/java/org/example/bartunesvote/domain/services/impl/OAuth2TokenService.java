@@ -2,6 +2,7 @@ package org.example.bartunesvote.domain.services.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.example.bartunesvote.domain.model.SpotifyTokenResponse;
 import org.example.bartunesvote.domain.services.impl.GlobalTokenService.OAuth2TokenContext;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;

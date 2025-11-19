@@ -1,7 +1,8 @@
 package org.example.bartunesvote.domain.services.impl;
 
-import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import org.example.bartunesvote.domain.model.Song;
+import org.example.bartunesvote.domain.services.SpotifyService;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -9,20 +10,16 @@ import org.springframework.web.client.RestTemplate;
 import java.util.*;
 
 @Service
-public class SpotifyServiceImpl {
+@RequiredArgsConstructor
+public class SpotifyServiceImpl  implements SpotifyService {
     private static final String SPOTIFY_PLAY_URL = "https://api.spotify.com/v1/me/player/play";
 
-    @Getter
     private List<Song> canciones;
 
     private final OAuth2TokenService tokenService;
 
-    public SpotifyServiceImpl(OAuth2TokenService tokenService) {
-        this.tokenService = tokenService;
-    }
-
-
-    public void playSong( String trackId) {
+    @Override
+    public void playSong(String trackId) {
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
         headers.setBearerAuth(tokenService.getAccessToken());
@@ -38,6 +35,7 @@ public class SpotifyServiceImpl {
         restTemplate.exchange(SPOTIFY_PLAY_URL, HttpMethod.PUT, entity, Void.class);
     }
 
+    @Override
     public int getTrackDurationInSeconds(String trackId) {
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
@@ -64,6 +62,7 @@ public class SpotifyServiceImpl {
         throw new IllegalStateException("No se pudo obtener la duración del track.");
     }
 
+    @Override
     public void setFourSongsFromPlaylist(String playlistId) {
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
@@ -96,6 +95,11 @@ public class SpotifyServiceImpl {
         }
 
         this.canciones = songs;
+    }
+
+    @Override
+    public List<Song> getCanciones() {
+        return this.canciones;
     }
 }
 

@@ -3,7 +3,7 @@ package org.example.bartunesvote.ui;
 import lombok.RequiredArgsConstructor;
 import org.example.bartunesvote.domain.model.Song;
 import org.example.bartunesvote.domain.model.SongCard;
-import org.example.bartunesvote.domain.services.impl.SpotifyServiceImpl;
+import org.example.bartunesvote.domain.services.SpotifyService;
 import org.example.bartunesvote.domain.services.impl.VoteServiceImpl;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Component;
@@ -17,7 +17,7 @@ import java.util.concurrent.TimeUnit;
 public class DynamicScheduler {
 
     private final VoteServiceImpl voteServiceImpl;
-    private final SpotifyServiceImpl spotifyServiceImpl;
+    private final SpotifyService spotifyServiceImpl;
     private final SimpMessagingTemplate messagingTemplate;
 
     private final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
