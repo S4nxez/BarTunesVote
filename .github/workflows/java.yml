@@ -35,7 +35,7 @@ jobs:
 
     - name: Check code quality
       run: |
-        mvn compile
+        mvn -f backend/pom.xml compile
         echo "Verificación de calidad de código completada"
 
     - name: Set up Docker Buildx
