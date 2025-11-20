@@ -60,5 +60,5 @@ jobs:
         file: Dockerfile
         push: true
         tags: |
-          ${{ secrets.DOCKERHUB_USERNAME }}/devtoksapi:latest
-          ${{ secrets.DOCKERHUB_USERNAME }}/devtoksapi:${{ steps.version.outputs.VERSION }}
+          ${{ secrets.DOCKERHUB_USERNAME }}/bartunesvote:latest
+          ${{ secrets.DOCKERHUB_USERNAME }}/bartunesvote:${{ steps.version.outputs.VERSION }}
